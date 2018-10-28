@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         String input = tvInput.getText().toString();
-        if (input.equals("0") && !pressedOperator(v))
+        if (input.equals("0") && !pressedOperator(v) && !pressedScientificKey(v))
             input = "";
         if (pressedEquals && v.getId() != R.id.btnEquals) {
-            if (pressedOperator(v))
+            if (pressedOperator(v) || pressedScientificKey(v))
                 input = tvResult.getText().toString();
             else
                 input = "";
@@ -103,18 +103,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnDiv:
                 pressedSciKey = false;
+                input = removeLastOperator(input);
                 tvInput.setText(input + btnDiv.getText());
                 break;
             case R.id.btnMult:
                 pressedSciKey = false;
+                input = removeLastOperator(input);
                 tvInput.setText(input + btnMult.getText());
                 break;
             case R.id.btnPlus:
                 pressedSciKey = false;
+                input = removeLastOperator(input);
                 tvInput.setText(input + btnPlus.getText());
                 break;
             case R.id.btnMinus:
                 pressedSciKey = false;
+                input = removeLastOperator(input);
                 tvInput.setText(input + btnMinus.getText());
                 break;
             case R.id.btnEquals:
@@ -122,12 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 pressedSciKey = false;
                 if (input.length() > 0)
                 {
-                    //remove last char of input if its an operator
-                    char endOfInput = input.charAt(input.length() - 1);
-                    if (endOfInput == 'x' || endOfInput == '÷' || endOfInput == '+' || endOfInput == '-')
-                    {
-                        input = input.substring(0, input.length() - 1);
-                    }
+                    input = removeLastOperator(input);
                     tvInput.setText(input);
                     calculate(input);
                 }
@@ -219,6 +218,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private String removeLastOperator(String input)
+    {
+        //remove last char of input if its an operator
+        char endOfInput = input.charAt(input.length() - 1);
+        if (endOfInput == 'x' || endOfInput == '÷' || endOfInput == '+' || endOfInput == '-')
+        {
+            input = input.substring(0, input.length() - 1);
+        }
+        return input;
+    }
+
     //special formatting to deal with sin, cos, tan, sqrt, since this symbol needs to come before the number
     private String formatInput(String input, String func)
     {
@@ -252,9 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //function checks whether button pressed was an operator
     private boolean pressedOperator(View v)
     {
-        if(v.getId() == R.id.btnDiv || v.getId() == R.id.btnMult || v.getId() == R.id.btnPlus || v.getId() == R.id.btnMinus
-                || v.getId() == R.id.btnSin || v.getId() == R.id.btnCos || v.getId() == R.id.btnTan
-                || v.getId() == R.id.btnX2 || v.getId() == R.id.btnSqrt)
+        if(v.getId() == R.id.btnDiv || v.getId() == R.id.btnMult || v.getId() == R.id.btnPlus || v.getId() == R.id.btnMinus)
             return true;
         else
             return false;
