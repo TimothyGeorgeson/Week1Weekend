@@ -82,6 +82,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("InputText", tvInput.getText().toString());
+        outState.putString("ResultText", tvResult.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String input = savedInstanceState.getString("InputText");
+        String result = savedInstanceState.getString("ResultText");
+        tvInput.setText(input);
+        tvResult.setText(result);
+    }
+
     //logic handling when a button is pressed
     @Override
     public void onClick(View v) {
